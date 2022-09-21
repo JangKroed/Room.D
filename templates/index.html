@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Webpage Title -->
+    <title>Home | Room-D</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">-->
+
+    <!-- Bulma CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <!-- Font Awesome CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/1d9772dff0.js" crossorigin="anonymous"></script>
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Gamja+Flower&family=Stylish&display=swap" rel="stylesheet">
+    <!--    스타일 시트 파일 연결-->
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <!--    자바 스크립트 파일 연결-->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+    <!--    부스트스랩 CSS-->
+    <!-- CSS only -->
+{#        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"#}
+{#              integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">#}
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+            crossorigin="anonymous"></script>
+
+    <style>
+            body {
+                margin-top: 114px;
+            }
+            .title {
+                font-weight: 800;
+                font-size: 5rem;
+                font-family: 'Stylish', sans-serif;
+            }
+
+            .subtitle {
+                font-family: 'Gamja Flower', cursive;
+                font-size: 2rem;
+
+            }
+
+            .banner {
+                height: 400px;
+
+                padding-top: 100px;
+            }
+
+            .help {
+                color: gray;
+            }
+        </style>
+    <script>
+        // 로그아웃 버튼에 들어가는 함수
+        // 클릭시 메인페이지 이동, 토큰지우기
+        function logoutBtn() {
+            $.removeCookie('mytoken', {path: '/'});
+            alert('로그아웃!')
+            window.location.href = "/login"
+        }
+    </script>
+</head>
+<body>
+<nav class="navbar is-transparent is-fixed-top" style="border-bottom: 1px solid lightgray;">
+    <div class="navbar-end">
+        <div class="navbar-item">
+            <div class="field is-grouped">
+                <p>
+                    <a href="/user/{{ user_info.username }}" class="bd-tw-button button" style="margin-right:10px;">
+              <span>
+                <i class="fa-regular fa-user"></i>
+              </span>
+                    </a>
+                </p>
+                <p class="control">
+                    <a class="button is-black" id="logout" onclick="logoutBtn()">
+                        <span>로그아웃</span>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</nav>
+<nav class="navbar is-transparent is-fixed-top" style="margin-top: 57px">
+    <div class="navbar-start">
+        <div class="navbar-item">
+            <div class="field is-grouped">
+                <p class="control">
+                    <a href="/" class="button is-large is-white">
+              <span style="font-family: 'Stylish', sans-serif; font-weight: bold">
+                Room_D
+              </span>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="navbar-end">
+        <div class="navbar-item">
+            <div class="field is-grouped">
+                <p class="control">
+                    <a onclick="get_posts()" class="bd-tw-button button">
+              <span>
+                Style
+              </span>
+                    </a>
+                </p>
+                <p class="control">
+                    <a onclick='$("#modal-post").addClass("is-active")' class="button is-black">
+                        <span><i class="fa-regular fa-pen-to-square"></i></span>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<section class="hero is-white banner">
+    <div class="hero-body has-text-centered" style="padding-bottom:1rem;margin:auto;">
+        <h1 class="title is-sparta">방구석 디자이너</h1>
+        <h3 class="subtitle is-sparta">Room.D</h3>
+    </div>
+</section>
+
+<section class="section">
+    <div class="modal" id="modal-post">
+        <div class="modal-background" onclick='$("#modal-post").removeClass("is-active")'></div>
+        <div class="modal-content">
+            <div class="box">
+                <article class="media">
+                    <div class="media-content">
+                        <div class="control is-expanded" style="margin-bottom: 20px">
+                                            <img class="img" id="preview" style="width: 50%; height: 50%; border-radius: 15px; margin-bottom: 20px;" />
+                                        <div class="file has-name">
+                                            <label class="file-label" style="width:100%">
+                                                <input id="post_img" class="file-input" type="file" name="resume" onchange="readURL(this);">
+                                                <span class="file-cta"><span class="file-icon"><i class="fa fa-upload" aria-hidden="true"></i></span>
+                                <span class="file-label">파일 선택</span>
+                            </span>
+                                                <span id="file-name" class="file-name" style="width:100%;max-width:100%"></span>
+                                            </label>
+                                        </div>
+
+                                    </div>
+                        <div class="field">
+                            <p class="control">
+                                        <textarea id="textarea-post" class="textarea"
+                                                  placeholder="무슨 생각을 하고 계신가요?"></textarea>
+                            </p>
+                        </div>
+                        <nav class="level is-mobile">
+                            <div class="level-left">
+
+                            </div>
+                            <div class="level-right">
+                                <div class="level-item">
+                                    <a class="button is-sparta" onclick="post()">포스팅하기</a>
+                                </div>
+                                <div class="level-item">
+                                    <a class="button is-sparta is-outlined"
+                                       onclick='$("#modal-post").removeClass("is-active")'>취소</a>
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+                </article>
+            </div>
+        </div>
+        <button class="modal-close is-large" aria-label="close"
+                onclick='$("#modal-post").removeClass("is-active")'></button>
+    </div>
+</section>
+<section class="section">
+    <div id="post-box" class="container">
+    </div>
+</section>
+</body>
+</html>
